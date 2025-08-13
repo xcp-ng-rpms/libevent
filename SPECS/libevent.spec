@@ -1,6 +1,6 @@
 Name:           libevent
 Version:        2.0.21
-Release:        4.0%{?dist}
+Release:        4.1%{?dist}
 Summary:        Abstract asynchronous event notification library
 
 Group:          System Environment/Libraries
@@ -8,9 +8,14 @@ License:        BSD
 URL:            http://sourceforge.net/projects/levent/        
 Source0:        http://downloads.sourceforge.net/levent/%{name}-%{version}-stable.tar.gz
 
+%bcond_without openssl
+
 BuildRequires: make
 BuildRequires: gcc
-BuildRequires: doxygen openssl-devel
+BuildRequires: doxygen
+%if %{with openssl}
+BuildRequires: openssl-compat-10-devel
+%endif
 
 Patch00: libevent-2.0.10-stable-configure.patch
 # Disable network tests
@@ -50,7 +55,8 @@ need to install %{name}-doc.
 
 %build
 %configure \
-    --disable-dependency-tracking --disable-static
+    --disable-dependency-tracking --disable-static \
+     %{?with_openssl:--enable-openssl} %{!?with_openssl:--disable-openssl}
 make %{?_smp_mflags} all
 
 # Create the docs
@@ -85,8 +91,10 @@ make check
 %{_libdir}/libevent-*.so.*
 %{_libdir}/libevent_core-*.so.*
 %{_libdir}/libevent_extra-*.so.*
-%{_libdir}/libevent_openssl-*.so.*
 %{_libdir}/libevent_pthreads-*.so.*
+%if %{with openssl}
+%{_libdir}/libevent_openssl-*.so.*
+%endif
 
 %files devel
 %defattr(-,root,root,-)
@@ -99,12 +107,14 @@ make check
 %{_libdir}/libevent.so
 %{_libdir}/libevent_core.so
 %{_libdir}/libevent_extra.so
-%{_libdir}/libevent_openssl.so
 %{_libdir}/libevent_pthreads.so
 %{_libdir}/pkgconfig/libevent.pc
-%{_libdir}/pkgconfig/libevent_openssl.pc
 %{_libdir}/pkgconfig/libevent_pthreads.pc
 %{_bindir}/event_rpcgen.*
+%if %{with openssl}
+%{_libdir}/libevent_openssl.so
+%{_libdir}/pkgconfig/libevent_openssl.pc
+%endif
 
 %files doc
 %defattr(-,root,root,-)
@@ -112,9 +122,11 @@ make check
 %{_docdir}/%{name}-devel-%{version}/sample/*
 
 %changelog
-* Wed Jan 07 2026 Philippe Coval <philippe.coval@vates.tech> - 2.0.21-4.0
-- Add make and gcc to BuildRequires
+* Thu Feb 12 2026 Philippe Coval <philippe.coval@vates.tech> - 2.0.21-4.1
+- Rebuild with openssl-compat-10
+- Make openssl optional (enabled by default)
 - Update legacy %patchN syntax for rpmspec
+- Add make and gcc to BuildRequires
 
 * Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 2.0.21-4
 - Mass rebuild 2014-01-24
