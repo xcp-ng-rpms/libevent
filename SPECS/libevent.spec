@@ -1,6 +1,6 @@
 Name:           libevent
 Version:        2.0.21
-Release:        4%{?dist}
+Release:        4.0%{?dist}
 Summary:        Abstract asynchronous event notification library
 
 Group:          System Environment/Libraries
@@ -8,6 +8,8 @@ License:        BSD
 URL:            http://sourceforge.net/projects/levent/        
 Source0:        http://downloads.sourceforge.net/levent/%{name}-%{version}-stable.tar.gz
 
+BuildRequires: make
+BuildRequires: gcc
 BuildRequires: doxygen openssl-devel
 
 Patch00: libevent-2.0.10-stable-configure.patch
@@ -114,6 +116,9 @@ make check
 %{_docdir}/%{name}-devel-%{version}/sample/*
 
 %changelog
+* Wed Jan 07 2026 Philippe Coval <philippe.coval@vates.tech> - 2.0.21-4.0
+- Add make and gcc to BuildRequires
+
 * Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 2.0.21-4
 - Mass rebuild 2014-01-24
 
