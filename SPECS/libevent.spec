@@ -46,11 +46,7 @@ If you like to develop programs using %{name}-devel, you will
 need to install %{name}-doc.
 
 %prep
-%setup -q -n libevent-%{version}-stable
-
-# 477685 -  libevent-devel multilib conflict
-%patch00 -p1
-%patch01 -p1 -b .nonettests
+%autosetup -n libevent-%{version}-stable -p1
 
 %build
 %configure \
@@ -118,6 +114,7 @@ make check
 %changelog
 * Wed Jan 07 2026 Philippe Coval <philippe.coval@vates.tech> - 2.0.21-4.0
 - Add make and gcc to BuildRequires
+- Update legacy %patchN syntax for rpmspec
 
 * Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 2.0.21-4
 - Mass rebuild 2014-01-24
