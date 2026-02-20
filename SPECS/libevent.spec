@@ -1,6 +1,6 @@
 Name:           libevent
 Version:        2.0.21
-Release:        4.1%{?dist}
+Release:        4.1~XCPNG2710.5%{?dist}
 Summary:        Abstract asynchronous event notification library
 
 Group:          System Environment/Libraries
